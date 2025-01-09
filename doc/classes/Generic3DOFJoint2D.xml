@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="Generic3DOFJoint2D" inherits="Joint2D" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="get_angular_flag" qualifiers="const">
+			<return type="bool" />
+			<param index="0" name="flag" type="int" enum="PhysicsServer2D.G3DOFJointAxisFlag" />
+			<description>
+			</description>
+		</method>
+		<method name="get_angular_param" qualifiers="const">
+			<return type="float" />
+			<param index="0" name="param" type="int" enum="PhysicsServer2D.G3DOFJointAngularAxisParam" />
+			<description>
+			</description>
+		</method>
+		<method name="get_linear_flag_x" qualifiers="const">
+			<return type="bool" />
+			<param index="0" name="flag" type="int" enum="PhysicsServer2D.G3DOFJointAxisFlag" />
+			<description>
+			</description>
+		</method>
+		<method name="get_linear_flag_y" qualifiers="const">
+			<return type="bool" />
+			<param index="0" name="flag" type="int" enum="PhysicsServer2D.G3DOFJointAxisFlag" />
+			<description>
+			</description>
+		</method>
+		<method name="get_linear_param_x" qualifiers="const">
+			<return type="float" />
+			<param index="0" name="param" type="int" enum="PhysicsServer2D.G3DOFJointLinearAxisParam" />
+			<description>
+			</description>
+		</method>
+		<method name="get_linear_param_y" qualifiers="const">
+			<return type="float" />
+			<param index="0" name="param" type="int" enum="PhysicsServer2D.G3DOFJointLinearAxisParam" />
+			<description>
+			</description>
+		</method>
+		<method name="set_angular_flag">
+			<return type="void" />
+			<param index="0" name="flag" type="int" enum="PhysicsServer2D.G3DOFJointAxisFlag" />
+			<param index="1" name="value" type="bool" />
+			<description>
+			</description>
+		</method>
+		<method name="set_angular_param">
+			<return type="void" />
+			<param index="0" name="param" type="int" enum="PhysicsServer2D.G3DOFJointAngularAxisParam" />
+			<param index="1" name="value" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="set_linear_flag_x">
+			<return type="void" />
+			<param index="0" name="flag" type="int" enum="PhysicsServer2D.G3DOFJointAxisFlag" />
+			<param index="1" name="value" type="bool" />
+			<description>
+			</description>
+		</method>
+		<method name="set_linear_flag_y">
+			<return type="void" />
+			<param index="0" name="flag" type="int" enum="PhysicsServer2D.G3DOFJointAxisFlag" />
+			<param index="1" name="value" type="bool" />
+			<description>
+			</description>
+		</method>
+		<method name="set_linear_param_x">
+			<return type="void" />
+			<param index="0" name="param" type="int" enum="PhysicsServer2D.G3DOFJointLinearAxisParam" />
+			<param index="1" name="value" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="set_linear_param_y">
+			<return type="void" />
+			<param index="0" name="param" type="int" enum="PhysicsServer2D.G3DOFJointLinearAxisParam" />
+			<param index="1" name="value" type="float" />
+			<description>
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="angular_limit/damping" type="float" setter="set_angular_param" getter="get_angular_param" default="1.0">
+		</member>
+		<member name="angular_limit/enabled" type="bool" setter="set_angular_flag" getter="get_angular_flag" default="false">
+		</member>
+		<member name="angular_limit/erp" type="float" setter="set_angular_param" getter="get_angular_param" default="0.0">
+		</member>
+		<member name="angular_limit/force_limit" type="float" setter="set_angular_param" getter="get_angular_param" default="0.0">
+		</member>
+		<member name="angular_limit/lower_angle" type="float" setter="set_angular_param" getter="get_angular_param" default="0.0">
+		</member>
+		<member name="angular_limit/restitution" type="float" setter="set_angular_param" getter="get_angular_param" default="0.0">
+		</member>
+		<member name="angular_limit/softness" type="float" setter="set_angular_param" getter="get_angular_param" default="0.5">
+		</member>
+		<member name="angular_limit/upper_angle" type="float" setter="set_angular_param" getter="get_angular_param" default="0.0">
+		</member>
+		<member name="angular_motor/enabled" type="bool" setter="set_angular_flag" getter="get_angular_flag" default="false">
+		</member>
+		<member name="angular_motor/force_limit" type="float" setter="set_angular_param" getter="get_angular_param" default="0.0">
+		</member>
+		<member name="angular_motor/target_velocity" type="float" setter="set_angular_param" getter="get_angular_param" default="0.0">
+		</member>
+		<member name="angular_spring/damping" type="float" setter="set_angular_param" getter="get_angular_param" default="1.0">
+		</member>
+		<member name="angular_spring/enabled" type="bool" setter="set_angular_flag" getter="get_angular_flag" default="false">
+		</member>
+		<member name="angular_spring/equilibrium_point" type="float" setter="set_angular_param" getter="get_angular_param" default="0.0">
+		</member>
+		<member name="angular_spring/stiffness" type="float" setter="set_angular_param" getter="get_angular_param" default="20.0">
+		</member>
+		<member name="linear_limit_x/damping" type="float" setter="set_linear_param_x" getter="get_linear_param_x" default="1.0">
+		</member>
+		<member name="linear_limit_x/enabled" type="bool" setter="set_linear_flag_x" getter="get_linear_flag_x" default="false">
+		</member>
+		<member name="linear_limit_x/lower_distance" type="float" setter="set_linear_param_x" getter="get_linear_param_x" default="0.0">
+		</member>
+		<member name="linear_limit_x/restitution" type="float" setter="set_linear_param_x" getter="get_linear_param_x" default="0.0">
+		</member>
+		<member name="linear_limit_x/softness" type="float" setter="set_linear_param_x" getter="get_linear_param_x" default="0.5">
+		</member>
+		<member name="linear_limit_x/upper_distance" type="float" setter="set_linear_param_x" getter="get_linear_param_x" default="0.0">
+		</member>
+		<member name="linear_limit_y/damping" type="float" setter="set_linear_param_y" getter="get_linear_param_y" default="1.0">
+		</member>
+		<member name="linear_limit_y/enabled" type="bool" setter="set_linear_flag_y" getter="get_linear_flag_y" default="false">
+		</member>
+		<member name="linear_limit_y/lower_distance" type="float" setter="set_linear_param_y" getter="get_linear_param_y" default="0.0">
+		</member>
+		<member name="linear_limit_y/restitution" type="float" setter="set_linear_param_y" getter="get_linear_param_y" default="0.0">
+		</member>
+		<member name="linear_limit_y/softness" type="float" setter="set_linear_param_y" getter="get_linear_param_y" default="0.5">
+		</member>
+		<member name="linear_limit_y/upper_distance" type="float" setter="set_linear_param_y" getter="get_linear_param_y" default="0.0">
+		</member>
+		<member name="linear_motor_x/enabled" type="bool" setter="set_linear_flag_x" getter="get_linear_flag_x" default="false">
+		</member>
+		<member name="linear_motor_x/force_limit" type="float" setter="set_linear_param_x" getter="get_linear_param_x" default="0.0">
+		</member>
+		<member name="linear_motor_x/target_velocity" type="float" setter="set_linear_param_x" getter="get_linear_param_x" default="0.0">
+		</member>
+		<member name="linear_motor_y/enabled" type="bool" setter="set_linear_flag_y" getter="get_linear_flag_y" default="false">
+		</member>
+		<member name="linear_motor_y/force_limit" type="float" setter="set_linear_param_y" getter="get_linear_param_y" default="0.0">
+		</member>
+		<member name="linear_motor_y/target_velocity" type="float" setter="set_linear_param_y" getter="get_linear_param_y" default="0.0">
+		</member>
+		<member name="linear_spring_x/damping" type="float" setter="set_linear_param_x" getter="get_linear_param_x" default="1.0">
+		</member>
+		<member name="linear_spring_x/enabled" type="bool" setter="set_linear_flag_x" getter="get_linear_flag_x" default="false">
+		</member>
+		<member name="linear_spring_x/equilibrium_point" type="float" setter="set_linear_param_x" getter="get_linear_param_x" default="0.0">
+		</member>
+		<member name="linear_spring_x/stiffness" type="float" setter="set_linear_param_x" getter="get_linear_param_x" default="20.0">
+		</member>
+		<member name="linear_spring_y/damping" type="float" setter="set_linear_param_y" getter="get_linear_param_y" default="1.0">
+		</member>
+		<member name="linear_spring_y/enabled" type="bool" setter="set_linear_flag_y" getter="get_linear_flag_y" default="false">
+		</member>
+		<member name="linear_spring_y/equilibrium_point" type="float" setter="set_linear_param_y" getter="get_linear_param_y" default="0.0">
+		</member>
+		<member name="linear_spring_y/stiffness" type="float" setter="set_linear_param_y" getter="get_linear_param_y" default="20.0">
+		</member>
+	</members>
+</class>

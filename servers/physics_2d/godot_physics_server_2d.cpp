@@ -1158,6 +1158,25 @@ void GodotPhysicsServer2D::joint_make_damped_spring(RID p_joint, const Vector2 &
 	memdelete(prev_joint);
 }
 
+void GodotPhysicsServer2D::joint_make_generic_3dof(RID p_joint, const Vector2 &p_pos, RID p_body_a, RID p_body_b) {
+	GodotBody2D *A = body_owner.get_or_null(p_body_a);
+	ERR_FAIL_NULL(A);
+	GodotBody2D *B = nullptr;
+	if (body_owner.owns(p_body_b)) {
+		B = body_owner.get_or_null(p_body_b);
+		ERR_FAIL_NULL(B);
+	}
+
+	GodotJoint2D *prev_joint = joint_owner.get_or_null(p_joint);
+	ERR_FAIL_NULL(prev_joint);
+
+	GodotJoint2D *joint = memnew(GodotGeneric3DOFJoint2D(p_pos, A, B));
+
+	joint_owner.replace(p_joint, joint);
+	joint->copy_settings_from(prev_joint);
+	memdelete(prev_joint);
+}
+
 void GodotPhysicsServer2D::pin_joint_set_flag(RID p_joint, PinJointFlag p_flag, bool p_enabled) {
 	GodotJoint2D *joint = joint_owner.get_or_null(p_joint);
 	ERR_FAIL_NULL(joint);
@@ -1210,6 +1229,66 @@ real_t GodotPhysicsServer2D::damped_spring_joint_get_param(RID p_joint, DampedSp
 
 	GodotDampedSpringJoint2D *dsj = static_cast<GodotDampedSpringJoint2D *>(joint);
 	return dsj->get_param(p_param);
+}
+
+void GodotPhysicsServer2D::generic_3dof_joint_set_linear_param(RID p_joint, Vector2::Axis p_axis, G3DOFJointLinearAxisParam p_param, real_t p_value) {
+    print_line(vformat("generic_3dof_joint_set_linear_param: Joint=%s, Axis=%d, Param=%d, Value=%.2f", 
+                        p_joint, int(p_axis), int(p_param), p_value));
+
+    // Dummy functionality
+}
+
+real_t GodotPhysicsServer2D::generic_3dof_joint_get_linear_param(RID p_joint, Vector2::Axis p_axis, G3DOFJointLinearAxisParam p_param) const {
+    print_line(vformat("generic_3dof_joint_get_linear_param: Joint=%s, Axis=%d, Param=%d", 
+                        p_joint, int(p_axis), int(p_param)));
+
+    // Dummy return value
+    return 0.0;
+}
+
+void GodotPhysicsServer2D::generic_3dof_joint_set_angular_param(RID p_joint, G3DOFJointAngularAxisParam p_param, real_t p_value) {
+    print_line(vformat("generic_3dof_joint_set_angular_param: Joint=%s, Param=%d, Value=%.2f", 
+                        p_joint, int(p_param), p_value));
+
+    // Dummy functionality
+}
+
+real_t GodotPhysicsServer2D::generic_3dof_joint_get_angular_param(RID p_joint, G3DOFJointAngularAxisParam p_param) const {
+    print_line(vformat("generic_3dof_joint_get_angular_param: Joint=%s, Param=%d", 
+                        p_joint, int(p_param)));
+
+    // Dummy return value
+    return 0.0;
+}
+
+void GodotPhysicsServer2D::generic_3dof_joint_set_linear_flag(RID p_joint, Vector2::Axis p_axis, G3DOFJointAxisFlag p_flag, bool p_enable) {
+    print_line(vformat("generic_3dof_joint_set_linear_flag: Joint=%s, Axis=%d, Flag=%d, Enable=%s", 
+                        p_joint, int(p_axis), int(p_flag), p_enable ? "true" : "false"));
+
+    // Dummy functionality
+}
+
+bool GodotPhysicsServer2D::generic_3dof_joint_get_linear_flag(RID p_joint, Vector2::Axis p_axis, G3DOFJointAxisFlag p_flag) const {
+    print_line(vformat("generic_3dof_joint_get_linear_flag: Joint=%s, Axis=%d, Flag=%d", 
+                        p_joint, int(p_axis), int(p_flag)));
+
+    // Dummy return value
+    return false;
+}
+
+void GodotPhysicsServer2D::generic_3dof_joint_set_angular_flag(RID p_joint, G3DOFJointAxisFlag p_flag, bool p_enable) {
+    print_line(vformat("generic_3dof_joint_set_angular_flag: Joint=%s, Flag=%d, Enable=%s", 
+                        p_joint, int(p_flag), p_enable ? "true" : "false"));
+
+    // Dummy functionality
+}
+
+bool GodotPhysicsServer2D::generic_3dof_joint_get_angular_flag(RID p_joint, G3DOFJointAxisFlag p_flag) const {
+    print_line(vformat("generic_3dof_joint_get_angular_flag: Joint=%s, Flag=%d", 
+                        p_joint, int(p_flag)));
+
+    // Dummy return value
+    return false;
 }
 
 PhysicsServer2D::JointType GodotPhysicsServer2D::joint_get_type(RID p_joint) const {

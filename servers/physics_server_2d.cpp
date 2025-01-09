@@ -777,6 +777,7 @@ void PhysicsServer2D::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("joint_make_pin", "joint", "anchor", "body_a", "body_b"), &PhysicsServer2D::joint_make_pin, DEFVAL(RID()));
 	ClassDB::bind_method(D_METHOD("joint_make_groove", "joint", "groove1_a", "groove2_a", "anchor_b", "body_a", "body_b"), &PhysicsServer2D::joint_make_groove, DEFVAL(RID()), DEFVAL(RID()));
 	ClassDB::bind_method(D_METHOD("joint_make_damped_spring", "joint", "anchor_a", "anchor_b", "body_a", "body_b"), &PhysicsServer2D::joint_make_damped_spring, DEFVAL(RID()));
+	ClassDB::bind_method(D_METHOD("joint_make_generic_3dof", "joint", "anchor", "body_a", "body_b"), &PhysicsServer2D::joint_make_generic_3dof, DEFVAL(RID()));
 
 	ClassDB::bind_method(D_METHOD("pin_joint_set_flag", "joint", "flag", "enabled"), &PhysicsServer2D::pin_joint_set_flag);
 	ClassDB::bind_method(D_METHOD("pin_joint_get_flag", "joint", "flag"), &PhysicsServer2D::pin_joint_get_flag);
@@ -786,6 +787,18 @@ void PhysicsServer2D::_bind_methods() {
 
 	ClassDB::bind_method(D_METHOD("damped_spring_joint_set_param", "joint", "param", "value"), &PhysicsServer2D::damped_spring_joint_set_param);
 	ClassDB::bind_method(D_METHOD("damped_spring_joint_get_param", "joint", "param"), &PhysicsServer2D::damped_spring_joint_get_param);
+
+	ClassDB::bind_method(D_METHOD("generic_3dof_joint_set_linear_param", "joint", "axis", "param", "value"), &PhysicsServer2D::generic_3dof_joint_set_linear_param);
+	ClassDB::bind_method(D_METHOD("generic_3dof_joint_get_linear_param", "joint", "axis", "param"), &PhysicsServer2D::generic_3dof_joint_get_linear_param);
+
+	ClassDB::bind_method(D_METHOD("generic_3dof_joint_set_angular_param", "joint", "param", "value"), &PhysicsServer2D::generic_3dof_joint_set_angular_param);
+	ClassDB::bind_method(D_METHOD("generic_3dof_joint_get_angular_param", "joint", "param"), &PhysicsServer2D::generic_3dof_joint_get_angular_param);
+
+	ClassDB::bind_method(D_METHOD("generic_3dof_joint_set_linear_flag", "joint", "axis", "flag", "enabled"), &PhysicsServer2D::generic_3dof_joint_set_linear_flag);
+	ClassDB::bind_method(D_METHOD("generic_3dof_joint_get_linear_flag", "joint", "axis", "flag"), &PhysicsServer2D::generic_3dof_joint_get_linear_flag);
+
+	ClassDB::bind_method(D_METHOD("generic_3dof_joint_set_angular_flag", "joint", "flag", "enabled"), &PhysicsServer2D::generic_3dof_joint_set_angular_flag);
+	ClassDB::bind_method(D_METHOD("generic_3dof_joint_get_angular_flag", "joint", "flag"), &PhysicsServer2D::generic_3dof_joint_get_angular_flag);
 
 	ClassDB::bind_method(D_METHOD("joint_get_type", "joint"), &PhysicsServer2D::joint_get_type);
 
@@ -861,6 +874,7 @@ void PhysicsServer2D::_bind_methods() {
 	BIND_ENUM_CONSTANT(JOINT_TYPE_PIN);
 	BIND_ENUM_CONSTANT(JOINT_TYPE_GROOVE);
 	BIND_ENUM_CONSTANT(JOINT_TYPE_DAMPED_SPRING);
+	BIND_ENUM_CONSTANT(JOINT_TYPE_GENERIC_3DOF);
 	BIND_ENUM_CONSTANT(JOINT_TYPE_MAX);
 
 	BIND_ENUM_CONSTANT(JOINT_PARAM_BIAS);
@@ -878,6 +892,37 @@ void PhysicsServer2D::_bind_methods() {
 	BIND_ENUM_CONSTANT(DAMPED_SPRING_REST_LENGTH);
 	BIND_ENUM_CONSTANT(DAMPED_SPRING_STIFFNESS);
 	BIND_ENUM_CONSTANT(DAMPED_SPRING_DAMPING);
+
+	BIND_ENUM_CONSTANT(G3DOF_JOINT_LINEAR_LOWER_LIMIT);
+	BIND_ENUM_CONSTANT(G3DOF_JOINT_LINEAR_UPPER_LIMIT);
+	BIND_ENUM_CONSTANT(G3DOF_JOINT_LINEAR_LIMIT_SOFTNESS);
+	BIND_ENUM_CONSTANT(G3DOF_JOINT_LINEAR_RESTITUTION);
+	BIND_ENUM_CONSTANT(G3DOF_JOINT_LINEAR_DAMPING);
+	BIND_ENUM_CONSTANT(G3DOF_JOINT_LINEAR_MOTOR_TARGET_VELOCITY);
+	BIND_ENUM_CONSTANT(G3DOF_JOINT_LINEAR_MOTOR_FORCE_LIMIT);
+	BIND_ENUM_CONSTANT(G3DOF_JOINT_LINEAR_SPRING_STIFFNESS);
+	BIND_ENUM_CONSTANT(G3DOF_JOINT_LINEAR_SPRING_DAMPING);
+	BIND_ENUM_CONSTANT(G3DOF_JOINT_LINEAR_SPRING_EQUILIBRIUM_POINT);
+	BIND_ENUM_CONSTANT(G3DOF_LINEAR_PARAM_COUNT);
+
+	BIND_ENUM_CONSTANT(G3DOF_JOINT_ANGULAR_LOWER_LIMIT);
+	BIND_ENUM_CONSTANT(G3DOF_JOINT_ANGULAR_UPPER_LIMIT);
+	BIND_ENUM_CONSTANT(G3DOF_JOINT_ANGULAR_LIMIT_SOFTNESS);
+	BIND_ENUM_CONSTANT(G3DOF_JOINT_ANGULAR_DAMPING);
+	BIND_ENUM_CONSTANT(G3DOF_JOINT_ANGULAR_RESTITUTION);
+	BIND_ENUM_CONSTANT(G3DOF_JOINT_ANGULAR_FORCE_LIMIT);
+	BIND_ENUM_CONSTANT(G3DOF_JOINT_ANGULAR_ERP);
+	BIND_ENUM_CONSTANT(G3DOF_JOINT_ANGULAR_MOTOR_TARGET_VELOCITY);
+	BIND_ENUM_CONSTANT(G3DOF_JOINT_ANGULAR_MOTOR_FORCE_LIMIT);
+	BIND_ENUM_CONSTANT(G3DOF_JOINT_ANGULAR_SPRING_STIFFNESS);
+	BIND_ENUM_CONSTANT(G3DOF_JOINT_ANGULAR_SPRING_DAMPING);
+	BIND_ENUM_CONSTANT(G3DOF_JOINT_ANGULAR_SPRING_EQUILIBRIUM_POINT);
+	BIND_ENUM_CONSTANT(G3DOF_ANGULAR_PARAM_COUNT);
+
+	BIND_ENUM_CONSTANT(G3DOF_JOINT_FLAG_ENABLE_LIMIT);
+	BIND_ENUM_CONSTANT(G3DOF_JOINT_FLAG_ENABLE_SPRING);
+	BIND_ENUM_CONSTANT(G3DOF_JOINT_FLAG_ENABLE_MOTOR);
+	BIND_ENUM_CONSTANT(G3DOF_JOINT_FLAG_COUNT);
 
 	BIND_ENUM_CONSTANT(CCD_MODE_DISABLED);
 	BIND_ENUM_CONSTANT(CCD_MODE_CAST_RAY);

@@ -593,3 +593,62 @@ GodotDampedSpringJoint2D::GodotDampedSpringJoint2D(const Vector2 &p_anchor_a, co
 	A->add_constraint(this, 0);
 	B->add_constraint(this, 1);
 }
+
+//////////////////////////////////////////////
+//////////////////////////////////////////////
+//////////////////////////////////////////////
+
+bool GodotGeneric3DOFJoint2D::setup(real_t p_step) {
+	ERR_PRINT("Generic3DOFJoint2D is not implemented by Godot. Its functionatilty must be implemented by an addon.");
+	return false;
+}
+
+bool GodotGeneric3DOFJoint2D::pre_solve(real_t p_step) {
+	ERR_PRINT("Generic3DOFJoint2D is not implemented by Godot. Its functionatilty must be implemented by an addon.");
+	return false;
+}
+
+void GodotGeneric3DOFJoint2D::solve(real_t p_step) {
+	ERR_PRINT("Generic3DOFJoint2D is not implemented by Godot. Its functionatilty must be implemented by an addon.");
+}
+
+void GodotGeneric3DOFJoint2D::set_linear_param(Vector2::Axis p_axis, PhysicsServer2D::G3DOFJointLinearAxisParam p_param, real_t p_value) {
+	ERR_PRINT("Generic3DOFJoint2D is not implemented by Godot. Its functionatilty must be implemented by an addon.");
+}
+
+real_t GodotGeneric3DOFJoint2D::get_linear_param(Vector2::Axis p_axis, PhysicsServer2D::G3DOFJointLinearAxisParam p_param) const {
+	ERR_PRINT("Generic3DOFJoint2D is not implemented by Godot. Its functionatilty must be implemented by an addon.");
+	return 0.0;
+}
+
+void GodotGeneric3DOFJoint2D::set_angular_param(PhysicsServer2D::G3DOFJointAngularAxisParam p_param, real_t p_value) {
+	ERR_PRINT("Generic3DOFJoint2D is not implemented by Godot. Its functionatilty must be implemented by an addon.");
+}
+
+real_t GodotGeneric3DOFJoint2D::get_angular_param(PhysicsServer2D::G3DOFJointAngularAxisParam p_param) const {
+	ERR_PRINT("Generic3DOFJoint2D is not implemented by Godot. Its functionatilty must be implemented by an addon.");
+	return 0.0;
+}
+
+void GodotGeneric3DOFJoint2D::set_linear_flag(Vector2::Axis p_axis, PhysicsServer2D::G3DOFJointAxisFlag p_flag, bool p_enabled) {
+	ERR_PRINT("Generic3DOFJoint2D is not implemented by Godot. Its functionatilty must be implemented by an addon.");
+}
+
+bool GodotGeneric3DOFJoint2D::get_angular_flag(PhysicsServer2D::G3DOFJointAxisFlag p_flag) const {
+	ERR_PRINT("Generic3DOFJoint2D is not implemented by Godot. Its functionatilty must be implemented by an addon.");
+	return false;
+}
+
+GodotGeneric3DOFJoint2D::GodotGeneric3DOFJoint2D(const Vector2 &p_pos, GodotBody2D *p_body_a, GodotBody2D *p_body_b) :
+		GodotJoint2D(_arr, p_body_b ? 2 : 1) {
+	A = p_body_a;
+	B = p_body_b;
+	anchor_A = p_body_a->get_inv_transform().xform(p_pos);
+	anchor_B = p_body_b ? p_body_b->get_inv_transform().xform(p_pos) : p_pos;
+
+	p_body_a->add_constraint(this, 0);
+	if (p_body_b) {
+		p_body_b->add_constraint(this, 1);
+		initial_angle = A->get_transform().get_origin().angle_to_point(B->get_transform().get_origin());
+	}
+}

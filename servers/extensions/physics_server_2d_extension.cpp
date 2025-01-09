@@ -315,6 +315,7 @@ void PhysicsServer2DExtension::_bind_methods() {
 	GDVIRTUAL_BIND(_joint_make_pin, "joint", "anchor", "body_a", "body_b");
 	GDVIRTUAL_BIND(_joint_make_groove, "joint", "a_groove1", "a_groove2", "b_anchor", "body_a", "body_b");
 	GDVIRTUAL_BIND(_joint_make_damped_spring, "joint", "anchor_a", "anchor_b", "body_a", "body_b");
+	GDVIRTUAL_BIND(_joint_make_generic_3dof, "joint", "anchor", "body_a", "body_b");
 
 	GDVIRTUAL_BIND(_pin_joint_set_flag, "joint", "flag", "enabled");
 	GDVIRTUAL_BIND(_pin_joint_get_flag, "joint", "flag");
@@ -324,6 +325,18 @@ void PhysicsServer2DExtension::_bind_methods() {
 
 	GDVIRTUAL_BIND(_damped_spring_joint_set_param, "joint", "param", "value");
 	GDVIRTUAL_BIND(_damped_spring_joint_get_param, "joint", "param");
+
+	GDVIRTUAL_BIND(_generic_3dof_joint_set_linear_param, "joint", "axis", "param", "value");
+	GDVIRTUAL_BIND(_generic_3dof_joint_get_linear_param, "joint", "axis", "param");
+
+	GDVIRTUAL_BIND(_generic_3dof_joint_set_angular_param, "joint", "param", "value");
+	GDVIRTUAL_BIND(_generic_3dof_joint_get_angular_param, "joint", "param");
+
+	GDVIRTUAL_BIND(_generic_3dof_joint_set_linear_flag, "joint", "axis", "flag", "enabled");
+	GDVIRTUAL_BIND(_generic_3dof_joint_get_linear_flag, "joint", "axis", "flag");
+
+	GDVIRTUAL_BIND(_generic_3dof_joint_set_angular_flag, "joint", "flag", "enabled");
+	GDVIRTUAL_BIND(_generic_3dof_joint_get_angular_flag, "joint", "flag");
 
 	GDVIRTUAL_BIND(_joint_get_type, "joint");
 

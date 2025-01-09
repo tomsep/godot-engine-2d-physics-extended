@@ -533,7 +533,8 @@ public:
 		JOINT_TYPE_PIN,
 		JOINT_TYPE_GROOVE,
 		JOINT_TYPE_DAMPED_SPRING,
-		JOINT_TYPE_MAX
+		JOINT_TYPE_GENERIC_3DOF,
+		JOINT_TYPE_MAX,
 	};
 
 	enum JointParam {
@@ -551,6 +552,7 @@ public:
 	virtual void joint_make_pin(RID p_joint, const Vector2 &p_anchor, RID p_body_a, RID p_body_b = RID()) = 0;
 	virtual void joint_make_groove(RID p_joint, const Vector2 &p_a_groove1, const Vector2 &p_a_groove2, const Vector2 &p_b_anchor, RID p_body_a, RID p_body_b) = 0;
 	virtual void joint_make_damped_spring(RID p_joint, const Vector2 &p_anchor_a, const Vector2 &p_anchor_b, RID p_body_a, RID p_body_b = RID()) = 0;
+	virtual void joint_make_generic_3dof(RID p_joint, const Vector2 &p_anchor, RID p_body_a, RID p_body_b = RID()) = 0;
 
 	enum PinJointParam {
 		PIN_JOINT_SOFTNESS,
@@ -577,6 +579,55 @@ public:
 	};
 	virtual void damped_spring_joint_set_param(RID p_joint, DampedSpringParam p_param, real_t p_value) = 0;
 	virtual real_t damped_spring_joint_get_param(RID p_joint, DampedSpringParam p_param) const = 0;
+
+	enum G3DOFJointLinearAxisParam {
+		G3DOF_JOINT_LINEAR_LOWER_LIMIT,
+		G3DOF_JOINT_LINEAR_UPPER_LIMIT,
+		G3DOF_JOINT_LINEAR_LIMIT_SOFTNESS,
+		G3DOF_JOINT_LINEAR_RESTITUTION,
+		G3DOF_JOINT_LINEAR_DAMPING,
+		G3DOF_JOINT_LINEAR_MOTOR_TARGET_VELOCITY,
+		G3DOF_JOINT_LINEAR_MOTOR_FORCE_LIMIT,
+		G3DOF_JOINT_LINEAR_SPRING_STIFFNESS,
+		G3DOF_JOINT_LINEAR_SPRING_DAMPING,
+		G3DOF_JOINT_LINEAR_SPRING_EQUILIBRIUM_POINT,
+		G3DOF_LINEAR_PARAM_COUNT,
+	};
+
+	virtual void generic_3dof_joint_set_linear_param(RID p_joint, Vector2::Axis, G3DOFJointLinearAxisParam p_param, real_t p_value) = 0;
+	virtual real_t generic_3dof_joint_get_linear_param(RID p_joint, Vector2::Axis, G3DOFJointLinearAxisParam p_param) const = 0;
+
+	enum G3DOFJointAngularAxisParam {
+		G3DOF_JOINT_ANGULAR_LOWER_LIMIT,
+		G3DOF_JOINT_ANGULAR_UPPER_LIMIT,
+		G3DOF_JOINT_ANGULAR_LIMIT_SOFTNESS,
+		G3DOF_JOINT_ANGULAR_DAMPING,
+		G3DOF_JOINT_ANGULAR_RESTITUTION,
+		G3DOF_JOINT_ANGULAR_FORCE_LIMIT,
+		G3DOF_JOINT_ANGULAR_ERP,
+		G3DOF_JOINT_ANGULAR_MOTOR_TARGET_VELOCITY,
+		G3DOF_JOINT_ANGULAR_MOTOR_FORCE_LIMIT,
+		G3DOF_JOINT_ANGULAR_SPRING_STIFFNESS,
+		G3DOF_JOINT_ANGULAR_SPRING_DAMPING,
+		G3DOF_JOINT_ANGULAR_SPRING_EQUILIBRIUM_POINT,
+		G3DOF_ANGULAR_PARAM_COUNT,
+	};
+
+	virtual void generic_3dof_joint_set_angular_param(RID p_joint, G3DOFJointAngularAxisParam p_param, real_t p_value) = 0;
+	virtual real_t generic_3dof_joint_get_angular_param(RID p_joint, G3DOFJointAngularAxisParam p_param) const = 0;
+
+	enum G3DOFJointAxisFlag {
+		G3DOF_JOINT_FLAG_ENABLE_LIMIT,
+		G3DOF_JOINT_FLAG_ENABLE_SPRING,
+		G3DOF_JOINT_FLAG_ENABLE_MOTOR,
+		G3DOF_JOINT_FLAG_COUNT,
+	};
+
+	virtual void generic_3dof_joint_set_linear_flag(RID p_joint, Vector2::Axis, G3DOFJointAxisFlag p_flag, bool p_enable) = 0;
+	virtual bool generic_3dof_joint_get_linear_flag(RID p_joint, Vector2::Axis, G3DOFJointAxisFlag p_flag) const = 0;
+
+	virtual void generic_3dof_joint_set_angular_flag(RID p_joint, G3DOFJointAxisFlag p_flag, bool p_enable) = 0;
+	virtual bool generic_3dof_joint_get_angular_flag(RID p_joint, G3DOFJointAxisFlag p_flag) const = 0;
 
 	virtual JointType joint_get_type(RID p_joint) const = 0;
 
@@ -843,6 +894,9 @@ VARIANT_ENUM_CAST(PhysicsServer2D::JointType);
 VARIANT_ENUM_CAST(PhysicsServer2D::PinJointParam);
 VARIANT_ENUM_CAST(PhysicsServer2D::PinJointFlag);
 VARIANT_ENUM_CAST(PhysicsServer2D::DampedSpringParam);
+VARIANT_ENUM_CAST(PhysicsServer2D::G3DOFJointLinearAxisParam);
+VARIANT_ENUM_CAST(PhysicsServer2D::G3DOFJointAngularAxisParam);
+VARIANT_ENUM_CAST(PhysicsServer2D::G3DOFJointAxisFlag);
 VARIANT_ENUM_CAST(PhysicsServer2D::AreaBodyStatus);
 VARIANT_ENUM_CAST(PhysicsServer2D::ProcessInfo);
 

@@ -533,7 +533,8 @@ public:
 		JOINT_TYPE_PIN,
 		JOINT_TYPE_GROOVE,
 		JOINT_TYPE_DAMPED_SPRING,
-		JOINT_TYPE_MAX
+		JOINT_TYPE_MAX,
+		JOINT_TYPE_PIN_SPRING,
 	};
 
 	enum JointParam {
@@ -551,6 +552,7 @@ public:
 	virtual void joint_make_pin(RID p_joint, const Vector2 &p_anchor, RID p_body_a, RID p_body_b = RID()) = 0;
 	virtual void joint_make_groove(RID p_joint, const Vector2 &p_a_groove1, const Vector2 &p_a_groove2, const Vector2 &p_b_anchor, RID p_body_a, RID p_body_b) = 0;
 	virtual void joint_make_damped_spring(RID p_joint, const Vector2 &p_anchor_a, const Vector2 &p_anchor_b, RID p_body_a, RID p_body_b = RID()) = 0;
+	virtual void joint_make_pin_spring(RID p_joint, const Vector2 &p_anchor, RID p_body_a, RID p_body_b = RID()) = 0;
 
 	enum PinJointParam {
 		PIN_JOINT_SOFTNESS,
@@ -577,6 +579,24 @@ public:
 	};
 	virtual void damped_spring_joint_set_param(RID p_joint, DampedSpringParam p_param, real_t p_value) = 0;
 	virtual real_t damped_spring_joint_get_param(RID p_joint, DampedSpringParam p_param) const = 0;
+
+	enum PinSpringJointParam {
+		PIN_SPRING_JOINT_SOFTNESS,
+		PIN_SPRING_JOINT_LIMIT_UPPER,
+		PIN_SPRING_JOINT_LIMIT_LOWER,
+		PIN_SPRING_JOINT_MOTOR_TARGET_VELOCITY
+	};
+
+	virtual void pin_spring_joint_set_param(RID p_joint, PinSpringJointParam p_param, real_t p_value) = 0;
+	virtual real_t pin_spring_joint_get_param(RID p_joint, PinSpringJointParam p_param) const = 0;
+
+	enum PinSpringJointFlag {
+		PIN_SPRING_JOINT_FLAG_ANGULAR_LIMIT_ENABLED,
+		PIN_SPRING_JOINT_FLAG_MOTOR_ENABLED
+	};
+
+	virtual void pin_spring_joint_set_flag(RID p_joint, PinSpringJointFlag p_flag, bool p_enabled) = 0;
+	virtual bool pin_spring_joint_get_flag(RID p_joint, PinSpringJointFlag p_flag) const = 0;
 
 	virtual JointType joint_get_type(RID p_joint) const = 0;
 
@@ -843,6 +863,8 @@ VARIANT_ENUM_CAST(PhysicsServer2D::JointType);
 VARIANT_ENUM_CAST(PhysicsServer2D::PinJointParam);
 VARIANT_ENUM_CAST(PhysicsServer2D::PinJointFlag);
 VARIANT_ENUM_CAST(PhysicsServer2D::DampedSpringParam);
+VARIANT_ENUM_CAST(PhysicsServer2D::PinSpringJointParam);
+VARIANT_ENUM_CAST(PhysicsServer2D::PinSpringJointFlag);
 VARIANT_ENUM_CAST(PhysicsServer2D::AreaBodyStatus);
 VARIANT_ENUM_CAST(PhysicsServer2D::ProcessInfo);
 

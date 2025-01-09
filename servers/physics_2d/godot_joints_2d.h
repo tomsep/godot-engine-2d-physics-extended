@@ -118,6 +118,51 @@ public:
 	GodotPinJoint2D(const Vector2 &p_pos, GodotBody2D *p_body_a, GodotBody2D *p_body_b = nullptr);
 };
 
+class GodotPinSpringJoint2D : public GodotJoint2D {
+	union {
+		struct {
+			GodotBody2D *A;
+			GodotBody2D *B;
+		};
+
+		GodotBody2D *_arr[2] = { nullptr, nullptr };
+	};
+
+	Transform2D M;
+	Vector2 rA, rB;
+	Vector2 anchor_A;
+	Vector2 anchor_B;
+	Vector2 bias;
+	real_t initial_angle = 0.0;
+	real_t bias_velocity = 0.0;
+	real_t jn_max = 0.0;
+	real_t j_acc = 0.0;
+	real_t i_sum = 0.0;
+	Vector2 P;
+	real_t softness = 0.0;
+	real_t angular_limit_lower = 0.0;
+	real_t angular_limit_upper = 0.0;
+	real_t motor_target_velocity = 0.0;
+	bool is_joint_at_limit = false;
+	bool motor_enabled = false;
+	bool angular_limit_enabled = false;
+
+public:
+	virtual PhysicsServer2D::JointType get_type() const override { return PhysicsServer2D::JOINT_TYPE_PIN_SPRING; }
+
+	virtual bool setup(real_t p_step) override;
+	virtual bool pre_solve(real_t p_step) override;
+	virtual void solve(real_t p_step) override;
+
+	void set_param(PhysicsServer2D::PinSpringJointParam p_param, real_t p_value);
+	real_t get_param(PhysicsServer2D::PinSpringJointParam p_param) const;
+
+	void set_flag(PhysicsServer2D::PinSpringJointFlag p_flag, bool p_enabled);
+	bool get_flag(PhysicsServer2D::PinSpringJointFlag p_flag) const;
+
+	GodotPinSpringJoint2D(const Vector2 &p_pos, GodotBody2D *p_body_a, GodotBody2D *p_body_b = nullptr);
+};
+
 class GodotGrooveJoint2D : public GodotJoint2D {
 	union {
 		struct {

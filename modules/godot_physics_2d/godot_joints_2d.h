@@ -117,6 +117,32 @@ public:
 	GodotPinJoint2D(const Vector2 &p_pos, GodotBody2D *p_body_a, GodotBody2D *p_body_b = nullptr);
 };
 
+class GodotWheelJoint2D : public GodotJoint2D {
+	union {
+		struct {
+			GodotBody2D *A;
+			GodotBody2D *B;
+		};
+
+		GodotBody2D *_arr[2] = { nullptr, nullptr };
+	};
+
+public:
+	virtual PhysicsServer2D::JointType get_type() const override { return PhysicsServer2D::JOINT_TYPE_WHEEL; }
+
+	virtual bool setup(real_t p_step) override;
+	virtual bool pre_solve(real_t p_step) override;
+	virtual void solve(real_t p_step) override;
+
+	void set_param(PhysicsServer2D::WheelJointParam p_param, real_t p_value);
+	real_t get_param(PhysicsServer2D::WheelJointParam p_param) const;
+
+	void set_flag(PhysicsServer2D::WheelJointFlag p_flag, bool p_enabled);
+	bool get_flag(PhysicsServer2D::WheelJointFlag p_flag) const;
+
+	GodotWheelJoint2D(const Vector2 &p_pos, GodotBody2D *p_body_a, GodotBody2D *p_body_b = nullptr);
+};
+
 class GodotGrooveJoint2D : public GodotJoint2D {
 	union {
 		struct {

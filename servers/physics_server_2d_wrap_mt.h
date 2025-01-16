@@ -294,6 +294,7 @@ public:
 	FUNC4(joint_make_pin, RID, const Vector2 &, RID, RID);
 	FUNC6(joint_make_groove, RID, const Vector2 &, const Vector2 &, const Vector2 &, RID, RID);
 	FUNC5(joint_make_damped_spring, RID, const Vector2 &, const Vector2 &, RID, RID);
+	FUNC4(joint_make_wheel_joint_2d, RID, const Vector2 &, RID, RID);
 
 	FUNC3(pin_joint_set_param, RID, PinJointParam, real_t);
 	FUNC2RC(real_t, pin_joint_get_param, RID, PinJointParam);
@@ -303,6 +304,12 @@ public:
 
 	FUNC3(damped_spring_joint_set_param, RID, DampedSpringParam, real_t);
 	FUNC2RC(real_t, damped_spring_joint_get_param, RID, DampedSpringParam);
+
+	FUNC3(wheel_joint_set_param, RID, WheelJointParam, real_t);
+	FUNC2RC(real_t, wheel_joint_get_param, RID, WheelJointParam);
+
+	FUNC3(wheel_joint_set_flag, RID, WheelJointFlag, bool);
+	FUNC2RC(bool, wheel_joint_get_flag, RID, WheelJointFlag);
 
 	FUNC1RC(JointType, joint_get_type, RID);
 

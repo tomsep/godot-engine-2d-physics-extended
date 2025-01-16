@@ -1158,6 +1158,25 @@ void GodotPhysicsServer2D::joint_make_damped_spring(RID p_joint, const Vector2 &
 	memdelete(prev_joint);
 }
 
+void GodotPhysicsServer2D::joint_make_wheel_joint_2d(RID p_joint, const Vector2 &p_pos, RID p_body_a, RID p_body_b) {
+	GodotBody2D *A = body_owner.get_or_null(p_body_a);
+	ERR_FAIL_NULL(A);
+	GodotBody2D *B = nullptr;
+	if (body_owner.owns(p_body_b)) {
+		B = body_owner.get_or_null(p_body_b);
+		ERR_FAIL_NULL(B);
+	}
+
+	GodotJoint2D *prev_joint = joint_owner.get_or_null(p_joint);
+	ERR_FAIL_NULL(prev_joint);
+
+	GodotJoint2D *joint = memnew(GodotWheelJoint2D(p_pos, A, B));
+
+	joint_owner.replace(p_joint, joint);
+	joint->copy_settings_from(prev_joint);
+	memdelete(prev_joint);
+}
+
 void GodotPhysicsServer2D::pin_joint_set_flag(RID p_joint, PinJointFlag p_flag, bool p_enabled) {
 	GodotJoint2D *joint = joint_owner.get_or_null(p_joint);
 	ERR_FAIL_NULL(joint);
@@ -1210,6 +1229,42 @@ real_t GodotPhysicsServer2D::damped_spring_joint_get_param(RID p_joint, DampedSp
 
 	GodotDampedSpringJoint2D *dsj = static_cast<GodotDampedSpringJoint2D *>(joint);
 	return dsj->get_param(p_param);
+}
+
+void GodotPhysicsServer2D::wheel_joint_set_param(RID p_joint, WheelJointParam p_param, real_t p_value) {
+	GodotJoint2D *joint = joint_owner.get_or_null(p_joint);
+	ERR_FAIL_NULL(joint);
+	ERR_FAIL_COND(joint->get_type() != JOINT_TYPE_WHEEL);
+
+	GodotWheelJoint2D *pin_joint = static_cast<GodotWheelJoint2D *>(joint);
+	pin_joint->set_param(p_param, p_value);
+}
+
+real_t GodotPhysicsServer2D::wheel_joint_get_param(RID p_joint, WheelJointParam p_param) const {
+	GodotJoint2D *joint = joint_owner.get_or_null(p_joint);
+	ERR_FAIL_NULL_V(joint, 0);
+	ERR_FAIL_COND_V(joint->get_type() != JOINT_TYPE_WHEEL, 0);
+
+	GodotWheelJoint2D *pin_joint = static_cast<GodotWheelJoint2D *>(joint);
+	return pin_joint->get_param(p_param);
+}
+
+void GodotPhysicsServer2D::wheel_joint_set_flag(RID p_joint, WheelJointFlag p_flag, bool p_enabled) {
+	GodotJoint2D *joint = joint_owner.get_or_null(p_joint);
+	ERR_FAIL_NULL(joint);
+	ERR_FAIL_COND(joint->get_type() != JOINT_TYPE_WHEEL);
+
+	GodotWheelJoint2D *pin_joint = static_cast<GodotWheelJoint2D *>(joint);
+	pin_joint->set_flag(p_flag, p_enabled);
+}
+
+bool GodotPhysicsServer2D::wheel_joint_get_flag(RID p_joint, WheelJointFlag p_flag) const {
+	GodotJoint2D *joint = joint_owner.get_or_null(p_joint);
+	ERR_FAIL_NULL_V(joint, 0);
+	ERR_FAIL_COND_V(joint->get_type() != JOINT_TYPE_WHEEL, 0);
+
+	GodotWheelJoint2D *pin_joint = static_cast<GodotWheelJoint2D *>(joint);
+	return pin_joint->get_flag(p_flag);
 }
 
 PhysicsServer2D::JointType GodotPhysicsServer2D::joint_get_type(RID p_joint) const {

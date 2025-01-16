@@ -294,6 +294,7 @@
 #include "scene/2d/physics/joints/groove_joint_2d.h"
 #include "scene/2d/physics/joints/joint_2d.h"
 #include "scene/2d/physics/joints/pin_joint_2d.h"
+#include "scene/2d/physics/joints/wheel_joint_2d.h"
 #include "scene/2d/physics/kinematic_collision_2d.h"
 #include "scene/2d/physics/physical_bone_2d.h"
 #include "scene/2d/physics/physics_body_2d.h"
@@ -1156,6 +1157,9 @@ void register_scene_types() {
 
 	GDREGISTER_CLASS(SceneTree);
 	GDREGISTER_ABSTRACT_CLASS(SceneTreeTimer); // sorry, you can't create it
+
+	// Extended physics
+	GDREGISTER_CLASS(WheelJoint2D);
 
 #ifndef DISABLE_DEPRECATED
 	// Dropped in 4.0, near approximation.

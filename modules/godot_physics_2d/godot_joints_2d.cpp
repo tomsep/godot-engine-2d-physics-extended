@@ -593,3 +593,37 @@ GodotDampedSpringJoint2D::GodotDampedSpringJoint2D(const Vector2 &p_anchor_a, co
 	A->add_constraint(this, 0);
 	B->add_constraint(this, 1);
 }
+
+//////////////////////////////////////////////
+//////////////////////////////////////////////
+//////////////////////////////////////////////
+
+bool GodotWheelJoint2D::setup(real_t p_step) {
+	return false;
+}
+
+bool GodotWheelJoint2D::pre_solve(real_t p_step) {
+	return false;
+}
+
+void GodotWheelJoint2D::solve(real_t p_step) {
+}
+
+void GodotWheelJoint2D::set_param(PhysicsServer2D::WheelJointParam p_param, real_t p_value) {
+}
+
+real_t GodotWheelJoint2D::get_param(PhysicsServer2D::WheelJointParam p_param) const {
+	return 0.0;
+}
+
+void GodotWheelJoint2D::set_flag(PhysicsServer2D::WheelJointFlag p_flag, bool p_enabled) {
+}
+
+bool GodotWheelJoint2D::get_flag(PhysicsServer2D::WheelJointFlag p_flag) const {
+	return false;
+}
+
+GodotWheelJoint2D::GodotWheelJoint2D(const Vector2 &p_pos, GodotBody2D *p_body_a, GodotBody2D *p_body_b) :
+		GodotJoint2D(_arr, p_body_b ? 2 : 1) {
+	ERR_PRINT("Wheel joint not implemented by Godot physics!");
+}

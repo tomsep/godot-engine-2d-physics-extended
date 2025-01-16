@@ -21,12 +21,14 @@ Windows build example. C# enabled and 3D disabled.
 # Build Godot binary
 scons platform=windows target=editor disable_3d_physics=yes disable_modules="webp,theora,mobile_vr" module_mono_enabled=yes
 
-# Generate C# glue sources and gdextension API, must be two separate commands
+# Generate C# glue sources
 bin/godot.windows.editor.x86_64.mono --headless --generate-mono-glue modules/mono/glue
-bin/godot.windows.editor.x86_64.mono --headless --dump-extension-api
 
 # Build .NET assemblies
 python ./modules/mono/build_scripts/build_assemblies.py --godot-output-dir=./bin --godot-platform=windows
+
+# Generate extension api
+bin/godot.windows.editor.x86_64.mono --headless --dump-extension-api
 
 # Generate doc xml files
 bin/godot.windows.editor.x86_64.mono --doctool

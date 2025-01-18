@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="WheelJoint2D" inherits="Joint2D" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<members>
+		<member name="x_damping" type="float" setter="set_x_damping" getter="get_x_damping" default="1.0">
+		</member>
+		<member name="x_enable_limits" type="bool" setter="set_x_enable_limits" getter="get_x_enable_limits" default="false">
+		</member>
+		<member name="x_lower_limit" type="float" setter="set_x_lower_limit" getter="get_x_lower_limit" default="0.0">
+		</member>
+		<member name="x_stiffness" type="float" setter="set_x_stiffness" getter="get_x_stiffness" default="20.0">
+		</member>
+		<member name="x_upper_limit" type="float" setter="set_x_upper_limit" getter="get_x_upper_limit" default="0.0">
+		</member>
+		<member name="y_damping" type="float" setter="set_y_damping" getter="get_y_damping" default="1.0">
+		</member>
+		<member name="y_enable_limits" type="bool" setter="set_y_enable_limits" getter="get_y_enable_limits" default="false">
+		</member>
+		<member name="y_lower_limit" type="float" setter="set_y_lower_limit" getter="get_y_lower_limit" default="0.0">
+		</member>
+		<member name="y_stiffness" type="float" setter="set_y_stiffness" getter="get_y_stiffness" default="20.0">
+		</member>
+		<member name="y_upper_limit" type="float" setter="set_y_upper_limit" getter="get_y_upper_limit" default="0.0">
+		</member>
+	</members>
+</class>

@@ -845,6 +845,15 @@
 				Makes the joint a pin joint. If [param body_b] is an empty [RID], then [param body_a] is pinned to the point [param anchor] (given in global coordinates); otherwise, [param body_a] is pinned to [param body_b] at the point [param anchor] (given in global coordinates). To set the parameters which are specific to the pin joint, see [method pin_joint_set_param].
 			</description>
 		</method>
+		<method name="joint_make_wheel_joint_2d">
+			<return type="void" />
+			<param index="0" name="joint" type="RID" />
+			<param index="1" name="anchor" type="Vector2" />
+			<param index="2" name="body_a" type="RID" />
+			<param index="3" name="body_b" type="RID" default="RID()" />
+			<description>
+			</description>
+		</method>
 		<method name="joint_set_param">
 			<return type="void" />
 			<param index="0" name="joint" type="RID" />
@@ -987,6 +996,36 @@
 			<param index="2" name="value" type="float" />
 			<description>
 				Sets the value of the given space parameter.
+			</description>
+		</method>
+		<method name="wheel_joint_get_flag" qualifiers="const">
+			<return type="bool" />
+			<param index="0" name="joint" type="RID" />
+			<param index="1" name="flag" type="int" enum="PhysicsServer2D.WheelJointFlag" />
+			<description>
+			</description>
+		</method>
+		<method name="wheel_joint_get_param" qualifiers="const">
+			<return type="float" />
+			<param index="0" name="joint" type="RID" />
+			<param index="1" name="param" type="int" enum="PhysicsServer2D.WheelJointParam" />
+			<description>
+			</description>
+		</method>
+		<method name="wheel_joint_set_flag">
+			<return type="void" />
+			<param index="0" name="joint" type="RID" />
+			<param index="1" name="flag" type="int" enum="PhysicsServer2D.WheelJointFlag" />
+			<param index="2" name="enabled" type="bool" />
+			<description>
+			</description>
+		</method>
+		<method name="wheel_joint_set_param">
+			<return type="void" />
+			<param index="0" name="joint" type="RID" />
+			<param index="1" name="param" type="int" enum="PhysicsServer2D.WheelJointParam" />
+			<param index="2" name="value" type="float" />
+			<description>
 			</description>
 		</method>
 		<method name="world_boundary_shape_create">
@@ -1174,7 +1213,9 @@
 		<constant name="JOINT_TYPE_DAMPED_SPRING" value="2" enum="JointType">
 			Constant to create damped spring joints.
 		</constant>
-		<constant name="JOINT_TYPE_MAX" value="3" enum="JointType">
+		<constant name="JOINT_TYPE_WHEEL" value="3" enum="JointType">
+		</constant>
+		<constant name="JOINT_TYPE_MAX" value="4" enum="JointType">
 			Represents the size of the [enum JointType] enum.
 		</constant>
 		<constant name="JOINT_PARAM_BIAS" value="0" enum="JointParam">
@@ -1215,6 +1256,26 @@
 		</constant>
 		<constant name="DAMPED_SPRING_DAMPING" value="2" enum="DampedSpringParam">
 			Sets the damping ratio of the spring joint. A value of 0 indicates an undamped spring, while 1 causes the system to reach equilibrium as fast as possible (critical damping). The default value of this parameter is [code]1.5[/code].
+		</constant>
+		<constant name="WHEEL_JOINT_X_STIFFNESS" value="0" enum="WheelJointParam">
+		</constant>
+		<constant name="WHEEL_JOINT_X_DAMPING" value="1" enum="WheelJointParam">
+		</constant>
+		<constant name="WHEEL_JOINT_X_LOWER_LIMIT" value="2" enum="WheelJointParam">
+		</constant>
+		<constant name="WHEEL_JOINT_X_UPPER_LIMIT" value="3" enum="WheelJointParam">
+		</constant>
+		<constant name="WHEEL_JOINT_Y_STIFFNESS" value="4" enum="WheelJointParam">
+		</constant>
+		<constant name="WHEEL_JOINT_Y_DAMPING" value="5" enum="WheelJointParam">
+		</constant>
+		<constant name="WHEEL_JOINT_Y_LOWER_LIMIT" value="6" enum="WheelJointParam">
+		</constant>
+		<constant name="WHEEL_JOINT_Y_UPPER_LIMIT" value="7" enum="WheelJointParam">
+		</constant>
+		<constant name="WHEEL_JOINT_FLAG_X_LIMITS_ENABLED" value="0" enum="WheelJointFlag">
+		</constant>
+		<constant name="WHEEL_JOINT_FLAG_Y_LIMITS_ENABLED" value="1" enum="WheelJointFlag">
 		</constant>
 		<constant name="CCD_MODE_DISABLED" value="0" enum="CCDMode">
 			Disables continuous collision detection. This is the fastest way to detect body collisions, but it can miss small and/or fast-moving objects.

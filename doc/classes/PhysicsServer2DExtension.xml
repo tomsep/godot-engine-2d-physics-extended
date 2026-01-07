@@ -895,6 +895,15 @@
 				Overridable version of [method PhysicsServer2D.joint_make_pin].
 			</description>
 		</method>
+		<method name="_joint_make_wheel_joint_2d" qualifiers="virtual required">
+			<return type="void" />
+			<param index="0" name="joint" type="RID" />
+			<param index="1" name="anchor" type="Vector2" />
+			<param index="2" name="body_a" type="RID" />
+			<param index="3" name="body_b" type="RID" />
+			<description>
+			</description>
+		</method>
 		<method name="_joint_set_param" qualifiers="virtual required">
 			<return type="void" />
 			<param index="0" name="joint" type="RID" />
@@ -1101,6 +1110,36 @@
 			<description>
 				Called to indicate that the physics server is synchronizing and cannot access physics states if running on a separate thread. See also [method _end_sync].
 				Overridable version of [PhysicsServer2D]'s internal [code]sync[/code] method.
+			</description>
+		</method>
+		<method name="_wheel_joint_get_flag" qualifiers="virtual required const">
+			<return type="bool" />
+			<param index="0" name="joint" type="RID" />
+			<param index="1" name="flag" type="int" enum="PhysicsServer2D.WheelJointFlag" />
+			<description>
+			</description>
+		</method>
+		<method name="_wheel_joint_get_param" qualifiers="virtual required const">
+			<return type="float" />
+			<param index="0" name="joint" type="RID" />
+			<param index="1" name="param" type="int" enum="PhysicsServer2D.WheelJointParam" />
+			<description>
+			</description>
+		</method>
+		<method name="_wheel_joint_set_flag" qualifiers="virtual required">
+			<return type="void" />
+			<param index="0" name="joint" type="RID" />
+			<param index="1" name="flag" type="int" enum="PhysicsServer2D.WheelJointFlag" />
+			<param index="2" name="enabled" type="bool" />
+			<description>
+			</description>
+		</method>
+		<method name="_wheel_joint_set_param" qualifiers="virtual required">
+			<return type="void" />
+			<param index="0" name="joint" type="RID" />
+			<param index="1" name="param" type="int" enum="PhysicsServer2D.WheelJointParam" />
+			<param index="2" name="value" type="float" />
+			<description>
 			</description>
 		</method>
 		<method name="_world_boundary_shape_create" qualifiers="virtual required">

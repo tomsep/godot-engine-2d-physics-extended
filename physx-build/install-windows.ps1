@@ -2,7 +2,7 @@
 .SYNOPSIS
     Installs the physx engine build output on Windows (export templates, nupkgs, env vars).
 .PARAMETER SetEnv
-    Persist GODOT_PHYSICS_EXTENDED and LocalGodotNuGetPackages at user level.
+    Persist GODOT_PHYSICS_EXTENDED and GODOT_PHYSICS_EXTENDED_NUPKGS at user level.
 .PARAMETER PhysxHome
     (Also accepted as -Home.)
     Build output folder. Default: $env:GODOT_PHYSX_HOME or %LOCALAPPDATA%\godot-physx.
@@ -49,12 +49,12 @@ if (-not (Test-Path $editor)) { Write-Warning "Editor exe not found at $editor" 
 
 if ($SetEnv) {
     [Environment]::SetEnvironmentVariable('GODOT_PHYSICS_EXTENDED', $editor, 'User')
-    [Environment]::SetEnvironmentVariable('LocalGodotNuGetPackages', $nupkgs, 'User')
+    [Environment]::SetEnvironmentVariable('GODOT_PHYSICS_EXTENDED_NUPKGS', $nupkgs, 'User')
     Write-Host "Set user env vars. Restart terminals/IDEs to pick them up."
 } else {
     Write-Host "`nSet these (or re-run with -SetEnv):"
     Write-Host "  GODOT_PHYSICS_EXTENDED   = $editor"
-    Write-Host "  LocalGodotNuGetPackages  = $nupkgs"
+    Write-Host "  GODOT_PHYSICS_EXTENDED_NUPKGS  = $nupkgs"
 }
 
 Write-Host "`nVerify: & '$editor' --version"

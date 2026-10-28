@@ -105,7 +105,7 @@ In Windows PowerShell, from the repo (or wherever you have the script; WSL files
 pwsh .\physx-build\install-windows.ps1 -SetEnv
 ```
 
-This copies the Windows templates to `%APPDATA%\Godot\export_templates\4.7.2.physx.mono\` (`windows_debug_x86_64.exe`, `windows_release_x86_64.exe`) and sets user-level `GODOT_PHYSICS_EXTENDED` (Windows editor exe) and `LocalGodotNuGetPackages` (nupkgs folder). Without `-SetEnv` it only prints them. Restart terminals and IDEs afterwards.
+This copies the Windows templates to `%APPDATA%\Godot\export_templates\4.7.2.physx.mono\` (`windows_debug_x86_64.exe`, `windows_release_x86_64.exe`) and sets user-level `GODOT_PHYSICS_EXTENDED` (Windows editor exe) and `GODOT_PHYSICS_EXTENDED_NUPKGS` (nupkgs folder, used by `GodotPhysicsExtendedPackages` in `Game/TandemRideshare/nuget.config`). Without `-SetEnv` it only prints them. Restart terminals and IDEs afterwards.
 
 ## 8. Verify
 

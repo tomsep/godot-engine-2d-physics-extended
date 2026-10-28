@@ -12,6 +12,9 @@
 
 ## Compiling from source
 
+> **Note:** The Windows (MSVC) build notes below are superseded. This fork is now built with a Dockerised
+> Linux + Windows (MinGW) toolchain in WSL2. See [`physx-build/README.md`](physx-build/README.md).
+
 [See the official docs](https://docs.godotengine.org/en/4.7/engine_details/development/compiling/index.html)
 for compilation instructions for every supported platform.
 

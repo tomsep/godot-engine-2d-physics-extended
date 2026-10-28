@@ -77,11 +77,15 @@ fi
 
 if [[ $NEED_ASSEMBLIES == 1 ]]; then
   step "Build assemblies (linuxbsd)"
+  # GodotTools.csproj references GodotSharp.dll at <src>/bin/GodotSharp/Api/Debug, so build
+  # into /src/bin and copy the result out afterwards.
   python3 modules/mono/build_scripts/build_assemblies.py \
-    --godot-output-dir="$OUT/linux" --godot-platform=linuxbsd --push-nupkgs-local "$OUT/nupkgs"
+    --godot-output-dir=/src/bin --godot-platform=linuxbsd --push-nupkgs-local "$OUT/nupkgs"
+  rm -rf "$OUT/linux/GodotSharp"; cp -a bin/GodotSharp "$OUT/linux/GodotSharp"
   step "Build assemblies (windows)"
   python3 modules/mono/build_scripts/build_assemblies.py \
-    --godot-output-dir="$OUT/windows" --godot-platform=windows --push-nupkgs-local "$OUT/nupkgs"
+    --godot-output-dir=/src/bin --godot-platform=windows --push-nupkgs-local "$OUT/nupkgs"
+  rm -rf "$OUT/windows/GodotSharp"; cp -a bin/GodotSharp "$OUT/windows/GodotSharp"
 fi
 
 # Collect a built binary (and its .console variant) into an output dir.

@@ -79,7 +79,7 @@ On the first run, `build.sh` also builds the official base images (`godot-fedora
 
 ```bash
 ./physx-build/build.sh                       # dev profile, everything
-./physx-build/build.sh --profile production  # production=yes lto=thin
+./physx-build/build.sh --profile production  # production=yes lto=full
 ./physx-build/build.sh --only windows-editor,windows-template-release
 ./physx-build/build.sh --clean               # remove previous binaries and glue first
 ```

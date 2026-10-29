@@ -1,11 +1,26 @@
 #!/usr/bin/env bash
-# Runs INSIDE the godot-physx-build container. Called by build.sh; do not run directly.
+# Linux pass. Runs INSIDE the godot-physx-linux container. Called by build.sh; do not run directly.
+#
+# Always builds the Linux editor: it generates the mono glue that every other target
+# (including the Windows pass, container-build-windows.sh) compiles in. Then builds
+# the C# assemblies, the requested Linux targets, and the extension API dump when an
+# editor is part of the build.
+#
 # Env: PROFILE, ONLY (comma list or empty), CLEAN (0/1), SRC_SHA, SRC_DIRTY, JOBS.
 set -euo pipefail
 
 cd /src
 # shellcheck source=flags.env
 source physx-build/flags.env
+
+# Linux builds must use the buildroot SDK compiler (glibc 2.34 target, same as the
+# official Godot Linux binaries), not the container's host compiler. The image puts
+# it on PATH; this guard catches a stale or hand-built image.
+if [[ -z "${GODOT_SDK_LINUX_X86_64:-}" || "$(command -v gcc)" != "$GODOT_SDK_LINUX_X86_64"/* ]]; then
+  echo "ERROR: gcc is not the buildroot SDK compiler (GODOT_SDK_LINUX_X86_64=${GODOT_SDK_LINUX_X86_64:-unset})." >&2
+  echo "Rebuild the image with ./physx-build/build.sh (BASE_IMAGE must be godot-linux:*)." >&2
+  exit 1
+fi
 
 PROFILE="${PROFILE:-dev}"
 ONLY="${ONLY:-}"
@@ -31,14 +46,12 @@ done
 
 step() { printf '\n==== %s ====\n' "$*"; }
 
-scons_build() { # platform-flags target
-  local pf="$1" target="$2"
+scons_build() { # target
   # shellcheck disable=SC2086
-  scons -j"$JOBS" $COMMON_FLAGS $pf $PROFILE_FLAGS target="$target"
+  scons -j"$JOBS" $COMMON_FLAGS $LINUX_FLAGS $PROFILE_FLAGS target="$1"
 }
 
-mkdir -p "$OUT/linux" "$OUT/windows" "$OUT/nupkgs" "$SCONS_CACHE"
-mkdir -p "$NUGET_PACKAGES"
+mkdir -p "$OUT/linux" "$OUT/windows" "$OUT/nupkgs" "$SCONS_CACHE" "$NUGET_PACKAGES"
 
 if [[ "${CLEAN:-0}" == "1" ]]; then
   step "Cleaning"
@@ -47,46 +60,27 @@ if [[ "${CLEAN:-0}" == "1" ]]; then
          modules/mono/glue/mono_glue.gen.cpp
 fi
 
-# What do we need?
-NEED_LINUX_EDITOR=0
-NEED_ASSEMBLIES=0
+# The C# assemblies and nupkgs are rebuilt on every run, so a partial build never ships
+# templates next to assemblies from an older commit. The Windows pass builds the Windows
+# assemblies itself, after this pass. The API dump is only needed with an editor.
 NEED_API_DUMP=0
-if want linux-editor || want windows-editor; then NEED_LINUX_EDITOR=1; NEED_ASSEMBLIES=1; NEED_API_DUMP=1; fi
-# Windows templates and editor read generated glue (mono_glue.gen.cpp), so they need glue too.
-if want windows-template-debug || want windows-template-release || want linux-template-debug || want linux-template-release; then
-  NEED_LINUX_EDITOR=1
-fi
+if want linux-editor || want windows-editor; then NEED_API_DUMP=1; fi
 
 LINUX_EDITOR=bin/godot.linuxbsd.editor.x86_64.mono
 
-if [[ $NEED_LINUX_EDITOR == 1 ]]; then
-  step "Linux editor"
-  scons_build "$LINUX_FLAGS" editor
+step "Linux editor"
+scons_build editor
 
-  step "Generate mono glue"
-  "$LINUX_EDITOR" --headless --generate-mono-glue modules/mono/glue
-fi
+step "Generate mono glue"
+"$LINUX_EDITOR" --headless --generate-mono-glue modules/mono/glue
 
-# D3D12 dependencies (Mesa NIR, WinPixEventRuntime, Agility SDK). Cross-compiling puts them in bin/build_deps.
-if want windows-editor || want windows-template-debug || want windows-template-release; then
-  if [[ ! -d bin/build_deps/mesa-x86_64-gcc || ! -d bin/build_deps/agility_sdk || ! -d bin/build_deps/pix ]]; then
-    step "D3D12 dependencies"
-    python3 misc/scripts/install_d3d12_sdk_windows.py
-  fi
-fi
-
-if [[ $NEED_ASSEMBLIES == 1 ]]; then
-  step "Build assemblies (linuxbsd)"
-  # GodotTools.csproj references GodotSharp.dll at <src>/bin/GodotSharp/Api/Debug, so build
-  # into /src/bin and copy the result out afterwards.
-  python3 modules/mono/build_scripts/build_assemblies.py \
-    --godot-output-dir=/src/bin --godot-platform=linuxbsd --push-nupkgs-local "$OUT/nupkgs"
-  rm -rf "$OUT/linux/GodotSharp"; cp -a bin/GodotSharp "$OUT/linux/GodotSharp"
-  step "Build assemblies (windows)"
-  python3 modules/mono/build_scripts/build_assemblies.py \
-    --godot-output-dir=/src/bin --godot-platform=windows --push-nupkgs-local "$OUT/nupkgs"
-  rm -rf "$OUT/windows/GodotSharp"; cp -a bin/GodotSharp "$OUT/windows/GodotSharp"
-fi
+step "Build assemblies (linuxbsd)"
+# GodotTools.csproj references GodotSharp.dll at <src>/bin/GodotSharp/Api/Debug, so build
+# into /src/bin and copy the result out afterwards.
+rm -rf "$OUT/nupkgs"; mkdir -p "$OUT/nupkgs"
+python3 modules/mono/build_scripts/build_assemblies.py \
+  --godot-output-dir=/src/bin --godot-platform=linuxbsd --push-nupkgs-local "$OUT/nupkgs"
+rm -rf "$OUT/linux/GodotSharp"; cp -a bin/GodotSharp "$OUT/linux/GodotSharp"
 
 # Collect a built binary (and its .console variant) into an output dir.
 collect() { # dest-dir pattern
@@ -100,24 +94,12 @@ collect() { # dest-dir pattern
 
 if want linux-editor; then collect "$OUT/linux" 'godot.linuxbsd.editor.x86_64.mono'; fi
 if want linux-template-debug; then
-  step "Linux template_debug"; scons_build "$LINUX_FLAGS" template_debug
+  step "Linux template_debug"; scons_build template_debug
   collect "$OUT/linux" 'godot.linuxbsd.template_debug.x86_64.mono'
 fi
 if want linux-template-release; then
-  step "Linux template_release"; scons_build "$LINUX_FLAGS" template_release
+  step "Linux template_release"; scons_build template_release
   collect "$OUT/linux" 'godot.linuxbsd.template_release.x86_64.mono'
-fi
-if want windows-editor; then
-  step "Windows editor (MinGW)"; scons_build "$WINDOWS_FLAGS" editor
-  collect "$OUT/windows" 'godot.windows.editor.x86_64.mono*.exe'
-fi
-if want windows-template-debug; then
-  step "Windows template_debug (MinGW)"; scons_build "$WINDOWS_FLAGS" template_debug
-  collect "$OUT/windows" 'godot.windows.template_debug.x86_64.mono*.exe'
-fi
-if want windows-template-release; then
-  step "Windows template_release (MinGW)"; scons_build "$WINDOWS_FLAGS" template_release
-  collect "$OUT/windows" 'godot.windows.template_release.x86_64.mono*.exe'
 fi
 
 if [[ $NEED_API_DUMP == 1 ]]; then
@@ -129,6 +111,8 @@ if [[ $NEED_API_DUMP == 1 ]]; then
   rm -rf "$scratch"
 fi
 
+# The mingw= and date= lines are appended by build.sh after the Windows pass: the
+# MinGW compiler only exists in the Windows image.
 step "Manifest"
 version_py() { python3 -c "import version; print(version.$1)"; }
 {
@@ -145,12 +129,9 @@ version_py() { python3 -c "import version; print(version.$1)"; }
   echo "profile_flags=$PROFILE_FLAGS"
   echo "scons=$(scons --version | grep -m1 -o 'SCons: v[0-9.]*\|SCons by .*' | head -1)"
   echo "gcc=$(gcc -dumpfullversion)"
-  echo "mingw=$(x86_64-w64-mingw32-gcc-posix -dumpfullversion 2>/dev/null || echo n/a)"
   echo "dotnet=$(dotnet --version)"
-  echo "date=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 } > "$OUT/manifest.txt"
 cp -f "$OUT/manifest.txt" "$OUT/windows/manifest.txt"
 cp -f "$OUT/manifest.txt" "$OUT/linux/manifest.txt"
 
-step "Done"
-cat "$OUT/manifest.txt"
+step "Done (linux pass)"

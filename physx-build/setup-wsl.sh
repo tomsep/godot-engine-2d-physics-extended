@@ -134,5 +134,8 @@ if ! id -nG "$USER" | grep -qw docker; then
     echo "INFO: Added $USER to the docker group."
     echo "      Please run the following in Windows PowerShell:"
     echo "      > wsl --shutdown"
-    echo "      Then reopen WSL to apply group changes."
+    echo "      Then reopen WSL to apply group changes, and re-run this script."
+    exit 0
 fi
+
+echo "OK. Verify with: docker run --rm hello-world"
